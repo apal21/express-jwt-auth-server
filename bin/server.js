@@ -6,6 +6,7 @@ let config;
 try {
   config = JSON.parse(babelrc);
 } catch (err) {
+  // eslint-disable-next-line no-console
   console.error(err);
 }
 

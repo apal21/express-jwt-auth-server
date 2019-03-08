@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
+      // eslint-disable-next-line no-useless-escape
       validator: v => /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(v),
       message: props => `${props.value} is not a valid email id!`,
     },

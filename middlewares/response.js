@@ -15,6 +15,7 @@ class Response {
   validateStatusCode(statusCode) {
     if (!statusCode) {
       this.statusCode = 200;
+      // eslint-disable-next-line no-restricted-globals
     } else if (!isNaN(statusCode)) {
       this.statusCode = statusCode;
     } else {
