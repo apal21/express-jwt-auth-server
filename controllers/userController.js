@@ -48,9 +48,9 @@ const create = (req, res) => {
 const retrieve = (req, res) => {
   const { id } = req.params;
   User.findById({ _id: id }, (err, data) => {
-    if (err) {
+    if (err || !data) {
       res.statusCode = 500;
-      res.send(new Response('Cannot retrieve data', 500, err));
+      res.send(new Response('Cannot retrieve data', 500, err || 'User does not exist').getStructuredResponse());
       return;
     }
     res.send(new Response(data).getStructuredResponse());
@@ -79,9 +79,9 @@ const update = (req, res) => {
     { email, password: bcrypt.hashSync(password), name },
     { new: true },
     (err, data) => {
-      if (err) {
+      if (err || !data) {
         res.statusCode = 500;
-        res.send(new Response('Cannot update data', 500, err).getStructuredResponse());
+        res.send(new Response('Cannot update data', 500, err || 'User does not exist').getStructuredResponse());
         return;
       }
       res.send(new Response(data).getStructuredResponse());
