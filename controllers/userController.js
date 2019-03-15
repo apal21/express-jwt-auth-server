@@ -25,7 +25,7 @@ const create = (req, res) => {
 
     res.statusCode = 400;
     res.send(new Response(
-      'Required fields not present', 400, fields,
+      'Required fields not present', res.statusCode, fields,
     ).getStructuredResponse());
     return;
   }
@@ -37,11 +37,11 @@ const create = (req, res) => {
     name,
   }, (err, data) => {
     if (err) {
-      res.statusCode = 500;
-      res.send(new Response('Cannot Create User', 500, err).getStructuredResponse());
+      res.statusCode = 400;
+      res.send(new Response('Cannot Create User', res.statusCode, err).getStructuredResponse());
       return;
     }
-    res.send(new Response('User created successfully', 200, data).getStructuredResponse());
+    res.send(new Response('User created successfully', res.statusCode, data).getStructuredResponse());
   });
 };
 
@@ -49,8 +49,8 @@ const retrieve = (req, res) => {
   const { id } = req.params;
   User.findById({ _id: id }, (err, data) => {
     if (err || !data) {
-      res.statusCode = 500;
-      res.send(new Response('Cannot retrieve data', 500, err || 'User does not exist').getStructuredResponse());
+      res.statusCode = 400;
+      res.send(new Response('Cannot retrieve data', res.statusCode, err || 'User does not exist').getStructuredResponse());
       return;
     }
     res.send(new Response(data).getStructuredResponse());
@@ -69,7 +69,7 @@ const update = (req, res) => {
 
     res.statusCode = 400;
     res.send(new Response(
-      'Required fields not present', 400, fields,
+      'Required fields not present', res.statusCode, fields,
     ).getStructuredResponse());
     return;
   }
@@ -80,8 +80,8 @@ const update = (req, res) => {
     { new: true },
     (err, data) => {
       if (err || !data) {
-        res.statusCode = 500;
-        res.send(new Response('Cannot update data', 500, err || 'User does not exist').getStructuredResponse());
+        res.statusCode = 400;
+        res.send(new Response('Cannot update data', res.statusCode, err || 'User does not exist').getStructuredResponse());
         return;
       }
       res.send(new Response(data).getStructuredResponse());
@@ -93,13 +93,13 @@ const destroy = (req, res) => {
   const { id } = req.params;
   User.findOneAndRemove({ _id: id }).exec((err, data) => {
     if (err || !data) {
-      res.statusCode = 500;
+      res.statusCode = 400;
       res.send(new Response(
-        'Couldn\'nt delete user', 500, err || 'User does not exist',
+        'Couldn\'nt delete user', res.statusCode, err || 'User does not exist',
       ).getStructuredResponse());
       return;
     }
-    res.send(new Response('User deleted successfully', 200, data).getStructuredResponse());
+    res.send(new Response('User deleted successfully', res.statusCode, data).getStructuredResponse());
   });
 };
 
