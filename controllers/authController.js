@@ -155,6 +155,10 @@ const logout = (req, res) => {
   });
 };
 
+const verify = (req, res) => {
+  res.send(new Response('token is valid').getStructuredResponse());
+};
+
 export {
-  login, forgotPassword, resetPassword, logout,
+  login, forgotPassword, resetPassword, logout, verify,
 };
