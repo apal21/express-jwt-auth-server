@@ -144,4 +144,17 @@ const resetPassword = (req, res) => {
   });
 };
 
-export { login, forgotPassword, resetPassword };
+const logout = (req, res) => {
+  client.hdel(req.user.id, [req.user.jti, `exp-${req.user.jti}`], err => {
+    if (err) {
+      res.statusCode = 500;
+      res.send(new Response('Could not delete key', res.statusCode).getStructuredResponse());
+      return;
+    }
+    res.send(new Response('Successfully deleted the key').getStructuredResponse());
+  });
+};
+
+export {
+  login, forgotPassword, resetPassword, logout,
+};

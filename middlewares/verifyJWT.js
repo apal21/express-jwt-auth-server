@@ -40,8 +40,9 @@ const verifyJWT = role => (req, res, next) => {
     if (err) {
       res.statusCode = 500;
       res.send(new Response('Could not fetch data from Redis', res.statusCode, err).getStructuredResponse());
+      return;
     }
-    if (response[req.user.jti] !== sha256(token)) {
+    if (!response || response[req.user.jti] !== sha256(token)) {
       res.statusCode = 401;
       res.send(new Response('Token not found in Redis', res.statusCode).getStructuredResponse());
       return;
