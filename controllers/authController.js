@@ -60,5 +60,33 @@ const login = (req, res) => {
   });
 };
 
-// eslint-disable-next-line
-export { login };
+const forgotPassword = (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    res.statusCode = 400;
+    res.send(new Response('Email is required', res.statusCode).getStructuredResponse());
+    return;
+  }
+  User.findOne({ email }, (err, data) => {
+    if (err || !data) {
+      res.statusCode = 400;
+      res.send(new Response('Cannot find the user', res.statusCode, err || 'User does not exist').getStructuredResponse());
+      return;
+    }
+
+    User.findOneAndUpdate({ email }, { resetPassword: uuidv4() }, { new: true }, error => {
+      if (error) {
+        res.statusCode = 500;
+        res.send(new Response('Cannot update resetPassword field', res.statusCode, error).getStructuredResponse());
+        return;
+      }
+
+      // Other Logic goes here... (eg. send email)
+
+      res.send(new Response('Confirmation email sent successfully').getStructuredResponse());
+    });
+  });
+};
+
+export { login, forgotPassword };
