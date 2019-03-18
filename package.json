@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/server"
+    "start": "nodemon ./bin/server",
+    "production": "node ./bin/server"
   },
   "husky": {
     "hooks": {
