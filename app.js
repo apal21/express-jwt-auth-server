@@ -5,6 +5,8 @@ import logger from 'morgan';
 import router from './routes';
 import './models';
 
+import './cron/redisCron';
+
 const app = express();
 
 app.use(logger('dev'));
