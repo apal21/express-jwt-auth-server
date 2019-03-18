@@ -40,6 +40,7 @@ const login = (req, res) => {
         // eslint-disable-next-line no-underscore-dangle
         id: data._id,
         jti,
+        role: data.role,
         iat: Math.floor(Date.now() / 1000),
         exp,
       },
