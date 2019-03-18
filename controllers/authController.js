@@ -89,4 +89,57 @@ const forgotPassword = (req, res) => {
   });
 };
 
-export { login, forgotPassword };
+const resetPassword = (req, res) => {
+  const { email, password, resetPassword } = req.body;
+  const { id } = req.params;
+
+  if (!email || !password || !resetPassword) {
+    const fields = [];
+    if (!email) fields.push('email');
+    if (!password) fields.push('password');
+    if (!resetPassword) fields.push('resetPassword');
+
+    res.statusCode = 400;
+    res.send(new Response('Required fields not present', res.statusCode, fields).getStructuredResponse());
+    return;
+  }
+
+  if (password !== resetPassword) {
+    res.statusCode = 400;
+    res.send(new Response('password and resetPassword does not match', res.statusCode).getStructuredResponse());
+    return;
+  }
+
+  User.findOne({ email }, (err, data) => {
+    if (err || !data) {
+      res.statusCode = 400;
+      res.send(new Response('Cannot find user', res.statusCode, err || 'User does not exist').getStructuredResponse());
+      return;
+    }
+
+    if (id !== data.resetPassword) {
+      res.statusCode = 400;
+      res.send(new Response('Invalid or Expired URL id', res.statusCode).getStructuredResponse());
+      return;
+    }
+
+    User.findOneAndUpdate(
+      { email },
+      { resetPassword: null, password: bcrypt.hashSync(password) },
+      { new: true },
+      error => {
+        if (error) {
+          res.statusCode = 500;
+          res.send(new Response('Could not reset password', res.statusCode, error).getStructuredResponse());
+          return;
+        }
+
+        // Some other logic to acknowledge user about the password change goes here.
+
+        res.send(new Response('Password Updated Successfully').getStructuredResponse());
+      },
+    );
+  });
+};
+
+export { login, forgotPassword, resetPassword };
