@@ -90,6 +90,7 @@ const forgotPassword = (req, res) => {
 };
 
 const resetPassword = (req, res) => {
+  // eslint-disable-next-line no-shadow
   const { email, password, resetPassword } = req.body;
   const { id } = req.params;
 
