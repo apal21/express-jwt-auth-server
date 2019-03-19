@@ -5,7 +5,15 @@ JWT Auth Server implementation in Express.js using _Babel_ and _ESLint Airbnb_.
 * MongoDB
 * Redis
 
-**Note:** _Do not directly connect the frontend with this server as this returns all the server errors(if any) in the response._
+**Note:** _This server is not meant to connect directly with the frontend as you can set the configurations from the API call and this returns all the server errors(if any) in the response._
+
+## Usage
+* First copy/rename `.env.sample` to `.env`
+* Generate one `RS256` key-pair and paste the content in the respective fields of `.env` file. Refer [this gist](https://gist.github.com/ygotthilf/baa58da5c3dd1f69fae9)
+* Setup MongoDB and Redis on your machine.
+* Install all the NPM dependencies: `npm i`
+* To watch all the changes in development: `npm start`
+* To deploy this in production: `npm run production`
 
 ## Features
 * Multiple User Roles and Verification
@@ -13,6 +21,7 @@ JWT Auth Server implementation in Express.js using _Babel_ and _ESLint Airbnb_.
 * Verify tokens using Whitelisting strategy
 * Written in modern JavaScript
 * ESLint pre-commit hook
+* Set dynamic expiration time and subject in the token
 
 ## Routes
 1. [User CRUD routes for admins](https://github.com/apal21/express-jwt-auth-server/wiki/User-CRUD-Routes):

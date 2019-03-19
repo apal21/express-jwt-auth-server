@@ -9,7 +9,7 @@ import Response from '../middlewares/response';
 require('dotenv').config();
 
 const login = (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, config } = req.body;
 
   if (!email || !password) {
     const fields = [];
@@ -33,13 +33,44 @@ const login = (req, res) => {
       res.send(new Response('Password does not match', res.statusCode).getStructuredResponse());
       return;
     }
-    const exp = Math.floor(Date.now() / 1000) + 60 * 60 * 1; // Current time in UTC + 1 hour
+
+    let exp = Math.floor(Date.now() / 1000) + 60 * 60; // Current time in UTC + 1 hour;
+    let sub;
+
+    if (config) {
+      if ('exp' in config) {
+        exp = Number(config.exp); // eslint-disable-line prefer-destructuring
+        if (
+          exp > Math.floor(Date.now() / 1000) + 60 * 60 * 12
+          || exp < Math.floor(Date.now() / 1000) + 60 * 60
+        ) {
+          res.statusCode = 400;
+          res.send(
+            new Response(
+              'Expiration time in UTC must be between 1 hour and 12 hours',
+              res.statusCode,
+            ).getStructuredResponse(),
+          );
+          return;
+        }
+      }
+      if ('sub' in config) {
+        /*
+          Try to make this mandatory if using with multiple apps
+          to prevent unauthorized access to the other apps
+         */
+
+        sub = config.sub; // eslint-disable-line prefer-destructuring
+      }
+    }
+
     const jti = uuidv4();
     const token = jwt.sign(
       {
         // eslint-disable-next-line no-underscore-dangle
         id: data._id,
         jti,
+        sub,
         role: data.role,
         iat: Math.floor(Date.now() / 1000),
         exp,
