@@ -31,7 +31,7 @@ JWT Auth Server implementation in Express.js using _Babel_ and _ESLint Airbnb_.
     * `PUT` `/users/:id`
     * `DELETE` `/users/:id`
     
-2. Auth Routes:
+2. [Auth Routes](https://github.com/apal21/express-jwt-auth-server/wiki/Auth-Routes):
     * `POST` `/auth/login`
     * `POST` `/auth/register`
     * `POST` `/auth/forgot`
