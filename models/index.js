@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 
-mongoose.connect('mongodb://localhost:27017/auth', { useNewUrlParser: true, useCreateIndex: true });
+require('dotenv').config();
+
+mongoose.connect(process.env.MONGODB_URL, { useNewUrlParser: true, useCreateIndex: true });
 
 const db = mongoose.connection;
 // eslint-disable-next-line no-console
